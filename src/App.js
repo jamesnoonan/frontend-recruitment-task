@@ -4,6 +4,7 @@ import Filters from './components/Filters';
 import Results from './components/Results';
 import Banners from './components/Banners';
 import FeaturedResult from './components/FeaturedResult';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Results />
       <Banners />
       <FeaturedResult />
+      <Footer />
     </>
   );
 }
