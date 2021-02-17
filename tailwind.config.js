@@ -17,8 +17,16 @@ module.exports = {
       green: {
         500: '#1DC679',
       },
+      orange: {
+        600: '#FF9F00',
+      },
     },
-    extend: {},
+    extend: {
+      height: {
+        'screen-xs': '50vh',
+        'screen-sm': '75vh',
+      },
+    },
   },
   variants: {
     extend: {},
