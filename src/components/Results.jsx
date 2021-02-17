@@ -4,7 +4,7 @@ import ResultCard from './ResultCard';
 
 function Results(props) {
   return (
-    <div className="py-16 px-48 flex flex-col">
+    <div className="pt-16 px-48 flex flex-col">
       <div className="flex justify-between flex-wrap">
         <ResultCard />
         <ResultCard />
@@ -14,7 +14,7 @@ function Results(props) {
         <ResultCard />
       </div>
       <div className="text-center py-8">
-        <button className="bg-blue-600 text-white text-sm font-light rounded-full py-4 px-10">
+        <button className="bg-blue-600 text-white font-light text-sm rounded-full py-4 px-10">
           Show More
         </button>
       </div>
