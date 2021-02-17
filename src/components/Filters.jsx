@@ -1,12 +1,12 @@
+// The filters section of the page which changes which results are displayed
+
 function Filters(props) {
     // TODO: Get max numbers of beds and baths to create lists
-    let maxBed = 6;
-    let maxBath = 4;
-
-    new Array(maxBath).forEach((item, index) => console.log(index));
+    const maxBed = 6;
+    const maxBath = 4;
 
     return (
-        <div className="py-16 px-48">
+        <div className="pt-16 px-48">
             <h3 className="text-gray-700 text-2xl font-bold">Filters</h3>
             <div className="flex justify-between py-5">
                 {/* TODO: Reduce repeditiveness of select boxes */}
@@ -33,12 +33,12 @@ function Filters(props) {
             </div>
             <div className="flex justify-between">
                 <div className="flex flex-col w-2/5">
-                    <h4 className="font-medium text-gray-800">Price range</h4>
-                    <input type="range" name="price" className="w-full" />
+                    <h4 className="font-bold text-lg text-gray-700">Price range</h4>
+                    <input type="range" name="price" className="w-full py-4" />
                 </div>
                 <div className="flex flex-col w-2/5">
-                    <h4 className="font-medium text-gray-800">Square Footage</h4>
-                    <input type="range" name="squarefootage" className="w-full" />
+                    <h4 className="font-bold text-lg text-gray-700">Square Footage</h4>
+                    <input type="range" name="squarefootage" className="w-full py-4" />
                 </div>
             </div>
         </div>
