@@ -1,21 +1,10 @@
 import './App.scss';
-import Header from './components/Header';
-import Filters from './components/Filters';
-import Results from './components/Results';
-import Banners from './components/Banners';
-import FeaturedResult from './components/FeaturedResult';
-import Footer from './components/Footer';
+import Home from './pages/Home';
 
 function App() {
   return (
-    <>
-      <Header />
-      <Filters />
-      <Results />
-      <Banners />
-      <FeaturedResult />
-      <Footer />
-    </>
+    // Currently only one page, but this could be expanded by using the react router to switch pages
+    <Home />
   );
 }
 
