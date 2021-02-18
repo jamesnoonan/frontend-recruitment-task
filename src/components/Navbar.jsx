@@ -8,7 +8,7 @@ function Navbar(props) {
   return (
     <nav className="w-full h-28 px-20 bg-blue-600">
       <div className="h-full flex justify-between">
-        <ul className="h-full w-3/4 flex justify-around items-center  text-white text-sm">
+        <ul className="h-full w-3/4 flex justify-around items-center text-white text-xs font-light">
           <li>
             <img src={logo} alt="Reality Properties Logo" />
           </li>

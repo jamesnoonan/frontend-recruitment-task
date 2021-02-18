@@ -11,16 +11,16 @@ function Header(props) {
         id="header-main"
         className="pt-32 pb-16 flex-grow flex flex-col justify-center shadow-inner bg-blue-600"
       >
-        <h1 className="font-medium text-5xl text-white">
+        <h1 className="font-medium text-4xl text-white">
           Let us Guide You Home
         </h1>
-        <p className="font-light text-xl pt-3 text-white">
+        <p className="text-lg pt-3 text-white">
           Find the house of your dreams.
         </p>
         <div className="flex w-2/4 pt-10">
           <select
             name="search-type"
-            className="text-gray-700 p-4 rounded-tl-xl rounded-bl-xl"
+            className="text-gray-700 text-xs p-4 rounded-tl-xl rounded-bl-xl"
           >
             <option value="all">All</option>
             <option value="sale">For Sale</option>
@@ -33,7 +33,7 @@ function Header(props) {
           <input
             type="text"
             placeholder="Search for properties or keywords..."
-            className="flex-grow p-4 rounded-tr-xl rounded-br-xl placeholder-gray-600"
+            className="flex-grow p-4 rounded-tr-xl rounded-br-xl text-xs placeholder-gray-600"
           />
         </div>
       </div>
