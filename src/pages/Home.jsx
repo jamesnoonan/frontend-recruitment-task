@@ -15,9 +15,15 @@ import Footer from '../components/Footer';
 class Home extends React.Component {
   constructor(props) {
     super(props);
+
+    this.setSearchTerm = this.setSearchTerm.bind(this);
+    this.showMoreResults = this.showMoreResults.bind(this);
+
     this.state = {
       dataLoaded: false,
+      searchTerm: '',
       properties: [],
+      filteredProperties: [],
     };
   }
 
@@ -34,20 +40,73 @@ class Home extends React.Component {
       const items = objectData.slice(1);
       // Convert arrays to Property objects
       const data = items.map((item) => new Property(...item));
-      this.setState({ dataLoaded: true, properties: data });
+      this.setState({
+        dataLoaded: true,
+        properties: data,
+        filteredProperties: data,
+        resultsDisplayed: 6,
+        moreResults: data.length > 6,
+      });
     } catch (err) {
       // Error in collecting data
       this.setState({ dataLoaded: true });
     }
   }
 
+  showMoreResults(e) {
+    // Show 6 more results
+    this.setState((state, props) => ({
+      // Doesn't need to be capped since slice method deals with indexes larger than array length
+      resultsDisplayed: state.resultsDisplayed + 6,
+      moreResults: state.filteredProperties.length > state.resultsDisplayed + 6,
+    }));
+  }
+
+  filterResults() {
+    // Get all properties
+    const initial = [...this.state.properties];
+    // Filter the properties that match the requirements
+    const filtered = initial.filter(
+      (property) =>
+        property.title
+          .toLowerCase()
+          .includes(this.state.searchTerm.toLowerCase()) ||
+        property.address
+          .toLowerCase()
+          .includes(this.state.searchTerm.toLowerCase())
+    );
+    this.setState((state, props) => ({
+      filteredProperties: filtered,
+      // If the filtered results have more than 6, show the "Show More" button
+      moreResults: filtered.length > 6,
+    }));
+  }
+
+  setSearchTerm(term) {
+    this.setState(
+      // Update the search term and limit the results to 6 again
+      { searchTerm: term, resultsDisplayed: 6 },
+      this.filterResults
+    );
+  }
+
   render() {
     return (
       <>
-        <Header />
+        <Header
+          searchTerm={this.state.searchTerm}
+          setSearchTerm={this.setSearchTerm}
+        />
         <Filters />
         {this.state.properties.length > 0 && (
-          <Results results={this.state.properties} />
+          <Results
+            moreResults={this.state.moreResults}
+            showMoreResults={this.showMoreResults}
+            results={this.state.filteredProperties.slice(
+              0,
+              this.state.resultsDisplayed
+            )}
+          />
         )}
         <Banners />
         {this.state.properties.length > 0 && (

@@ -1,7 +1,7 @@
 // The header of the page with the hero section and navbar
 
-import search from '../assets/icons/search.svg';
 import Navbar from './Navbar';
+import Search from './Search';
 
 function Header(props) {
   return (
@@ -17,25 +17,10 @@ function Header(props) {
         <p className="text-lg pt-3 text-white">
           Find the house of your dreams.
         </p>
-        <div className="flex w-2/4 pt-10">
-          <select
-            name="search-type"
-            className="text-gray-700 text-xs p-4 rounded-tl-xl rounded-bl-xl"
-          >
-            <option value="all">All</option>
-            <option value="sale">For Sale</option>
-            <option value="rent">For Rent</option>
-            <option value="reserved">Reserved</option>
-          </select>
-          <div className="flex items-center justify-center pl-11 bg-white">
-            <img src={search} alt="Search Icon" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search for properties or keywords..."
-            className="flex-grow p-4 rounded-tr-xl rounded-br-xl text-xs placeholder-gray-600"
-          />
-        </div>
+        <Search
+          searchTerm={props.searchTerm}
+          setSearchTerm={props.setSearchTerm}
+        />
       </div>
     </div>
   );
