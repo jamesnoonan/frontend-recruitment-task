@@ -81,11 +81,20 @@ class Slider extends React.Component {
   handleMove(e) {
     if (this.state.mouseDown) {
       const pos = this.getMousePos(e);
-      this.setState((state, props) =>
-        state.currentHandle === 'min'
-          ? { currentMin: pos }
-          : { currentMax: pos }
-      );
+      this.setState((state, props) => {
+        // Check if slider handles are at least one step apart
+        const isStepApart =
+          state.currentHandle === 'min'
+            ? pos + props.step <= state.currentMax
+            : pos >= state.currentMin + props.step;
+        if (isStepApart) {
+          return state.currentHandle === 'min'
+            ? { currentMin: pos }
+            : { currentMax: pos };
+        } else {
+          return {};
+        }
+      });
     }
   }
 
