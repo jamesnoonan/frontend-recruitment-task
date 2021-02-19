@@ -1,5 +1,7 @@
 // The filters section of the page which changes which results are displayed
 
+import Slider from './Slider';
+
 function Filters(props) {
   // TODO: Get max numbers of beds and baths to create lists
   const maxBed = 6;
@@ -72,13 +74,25 @@ function Filters(props) {
         </select>
       </div>
       <div className="flex justify-between">
-        <div className="flex flex-col w-2/5">
+        <div className="flex flex-col w-1/2 pr-4">
           <h4 className="font-bold text-gray-700">Price range</h4>
-          <input type="range" name="price" className="w-full py-4" />
+          <Slider
+            className="w-full py-4"
+            min={100000}
+            max={10000000}
+            isPrice={true}
+            step={100000}
+          />
         </div>
-        <div className="flex flex-col w-2/5">
+        <div className="flex flex-col w-1/2 pl-4">
           <h4 className="font-bold text-gray-700">Square Footage</h4>
-          <input type="range" name="squarefootage" className="w-full py-4" />
+          <Slider
+            className="w-full py-4"
+            min={100}
+            max={2000}
+            isPrice={false}
+            step={100}
+          />
         </div>
       </div>
     </div>

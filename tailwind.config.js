@@ -25,11 +25,16 @@ module.exports = {
       colors: {
         gray: {
           50: '#F6F7F9',
+          200: '#E9E9E9',
         },
       },
       height: {
         'screen-xs': '50vh',
         'screen-sm': '75vh',
+      },
+      spacing: {
+        1.25: '0.3125rem', // 5px
+        4.5: '1.1875rem', // 19px
       },
       fontSize: {
         xs: '0.875rem', // 14px
