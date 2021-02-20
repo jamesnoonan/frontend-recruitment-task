@@ -48,81 +48,91 @@ class Slider extends React.Component {
   }
 
   setDistances() {
-    this.setState((state, props) => ({
-      left: this.getDistance(state, props, true),
-      right: this.getDistance(state, props, false),
-      textLeft: this.getDistance(state, props, true, true),
-      textRight: this.getDistance(state, props, false, true),
-    }));
+    this.setState((state, props) => {
+      // Middle distance from left or right for positioning purposes (in %)
+      const leftMid =
+        (100 * (state.currentMin - props.min)) / (props.max - props.min);
+      const rightMid =
+        (100 * (props.max - state.currentMax)) / (props.max - props.min);
+      const { minTextPos, maxTextPos } = this.getTextDistances(
+        leftMid,
+        rightMid
+      );
+      return {
+        left: leftMid,
+        right: rightMid,
+        textLeft: minTextPos,
+        textRight: maxTextPos,
+      };
+    });
   }
 
-  getDistance(state, props, left, isText) {
-    // Middle distance from left or right for positioning purposes (in %)
-    const leftMid =
-      (100 * (state.currentMin - props.min)) / (props.max - props.min);
-    const rightMid =
-      (100 * (props.max - state.currentMax)) / (props.max - props.min);
-    const mid = left ? leftMid : rightMid;
-    // If distance isn't for text, then simply return the mid point
-    if (!isText) {
-      return mid;
-    }
+  getTextDistances(leftMid, rightMid) {
+    let minTextPos = leftMid;
+    let maxTextPos = rightMid;
 
-    // Check if text is overflowing off either edge of the bar
-    const overflowLeft =
-      (leftMid / 100) * this.dragContainer.current.offsetWidth -
-      this.minText.current.offsetWidth / 2;
-    const overflowRight =
-      (rightMid / 100) * this.dragContainer.current.offsetWidth -
-      this.maxText.current.offsetWidth / 2;
-    // Shift text to edge of slider handle
+    const minTextWidth = this.minText.current.offsetWidth;
+    const maxTextWidth = this.maxText.current.offsetWidth;
+    const barWidth = this.dragContainer.current.offsetWidth;
+
+    // The distance to keep between the text
     const adjustment = 10;
-    // Convert px to % of slider bar
-    const overflowAmount =
-      (100 * ((left ? overflowLeft : overflowRight) + adjustment)) /
-      this.dragContainer.current.offsetWidth;
-    // If the text is overflowing, return the adjusted mid point
-    if (overflowAmount < 0) {
-      return mid - overflowAmount;
-    }
 
     // Check if text is crossing over each other
 
-    // Check if text is also pressed against edge of slider
-    const otherTextEdge = left ? overflowRight < 0 : overflowLeft < 0;
-    const betweenTextWidth =
-      this.maxText.current.offsetWidth / (left && otherTextEdge ? 1 : 2) +
-      this.minText.current.offsetWidth / (!left && otherTextEdge ? 1 : 2);
-    const textCrossover =
-      betweenTextWidth -
-      ((100 -
-        ((left && otherTextEdge ? 0 : rightMid) +
-          (!left && otherTextEdge ? 0 : leftMid))) /
-        100) *
-        this.dragContainer.current.offsetWidth;
-
+    // The combined amount that the text sticks out from the slider handles
+    const betweenTextWidth = (maxTextWidth + minTextWidth) / 2;
+    // The px value of the crossover of the text
+    let textCrossover =
+      betweenTextWidth - ((100 - rightMid - leftMid) / 100) * barWidth;
+    let crossoverRelative;
+    // If the text is crossing over, then adjust the position
     if (textCrossover > 0) {
-      const crossoverRelative =
-        (100 * (textCrossover + 10)) / this.dragContainer.current.offsetWidth;
+      crossoverRelative = (100 * (textCrossover + adjustment)) / barWidth;
       // The distance to shift the text so that it doesn't overflow
-      const textOverflowShifted = crossoverRelative / (otherTextEdge ? 1 : 2);
-      if (textOverflowShifted > overflowAmount) {
-        // Return position of text at very end of slider
-        return (
-          (100 *
-            (left
-              ? this.minText.current.offsetWidth
-              : this.maxText.current.offsetWidth)) /
-          2 /
-          this.dragContainer.current.offsetWidth
-        );
-      } else {
-        // Return shifted text to avoid crossover
-        return mid - textOverflowShifted;
-      }
+      minTextPos -= crossoverRelative / 2;
+      maxTextPos -= crossoverRelative / 2;
     }
 
-    return mid;
+    // Check if text is overflowing off either edge of the bar
+
+    // Calculate px of overflow
+    const overflowLeft = minTextWidth / 2 - (minTextPos / 100) * barWidth;
+    const overflowRight = maxTextWidth / 2 - (maxTextPos / 100) * barWidth;
+
+    // If the text is overflowing, return the adjusted mid point
+
+    let handleAtEnd;
+    if (overflowLeft > 0) {
+      // Set the position to the extreme left end
+      minTextPos = (100 * (minTextWidth / 2 - adjustment)) / barWidth;
+      handleAtEnd = 'left';
+    }
+    if (overflowRight > 0) {
+      // Set the position to the extreme right end
+      maxTextPos = (100 * (maxTextWidth / 2 - adjustment)) / barWidth;
+      handleAtEnd = 'right';
+    }
+
+    // Check if stopping the text at the end of the bar caused text crossover
+    // The px value of the crossover of the text
+    textCrossover =
+      ((minTextPos + maxTextPos) / 100) * barWidth +
+      (minTextWidth + maxTextWidth) / 2 -
+      barWidth;
+
+    if (textCrossover > 0) {
+      // Convert px to % of slider bar width
+      crossoverRelative = (100 * (textCrossover + adjustment)) / barWidth;
+
+      // Change the position of the text that isn't at end
+      if (handleAtEnd === 'left') {
+        maxTextPos -= crossoverRelative;
+      } else if (handleAtEnd === 'right') {
+        minTextPos -= crossoverRelative;
+      }
+    }
+    return { minTextPos, maxTextPos };
   }
 
   handleMouseDown(e) {
