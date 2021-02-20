@@ -9,6 +9,7 @@ class Slider extends React.Component {
 
     this.handleMove = this.handleMove.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleTouch = this.handleTouch.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.setDistances = this.setDistances.bind(this);
 
@@ -31,6 +32,7 @@ class Slider extends React.Component {
   componentDidMount() {
     // Handle mouse up no matter where the user releases the mouse
     window.addEventListener('mouseup', this.handleMouseUp, false);
+    window.addEventListener('touchend', this.handleMouseUp, false);
     // Adjust text distances if browser is resized
     this.setDistances();
     window.addEventListener('resize', this.setDistances);
@@ -52,6 +54,7 @@ class Slider extends React.Component {
     // Remove listeners once component is destroyed
     window.removeEventListener('resize', this.setDistances);
     window.removeEventListener('mouseup', this.handleMouseUp, false);
+    window.removeEventListener('touchend', this.handleMouseUp, false);
   }
 
   setDistances() {
@@ -196,12 +199,22 @@ class Slider extends React.Component {
     }
   }
 
+  handleTouch(e, type) {
+    if (type === 'down') {
+      this.handleMouseDown(e.touches[0]);
+    } else if (type === 'move') {
+      this.handleMove(e.touches[0]);
+    }
+  }
+
   render() {
     return (
       <div
         className="py-6 select-none"
         onMouseMove={this.handleMove}
         onMouseDown={this.handleMouseDown}
+        onTouchStart={(e) => this.handleTouch(e, 'down')}
+        onTouchMove={(e) => this.handleTouch(e, 'move')}
         ref={this.dragContainer}
       >
         <div className="relative">
