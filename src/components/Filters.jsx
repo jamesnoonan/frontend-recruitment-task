@@ -10,18 +10,36 @@ function Filters(props) {
       <div className="flex justify-between py-5 -mx-3">
         <SelectBox
           name="Baths"
+          keyValue="baths"
           max={props.filterOptions.baths.max}
           min={props.filterOptions.baths.min}
           isNumerical={true}
+          setFilterValues={props.setFilterValues}
+          filterValues={props.filterValues}
         />
         <SelectBox
           name="Beds"
+          keyValue="beds"
           max={props.filterOptions.beds.max}
           min={props.filterOptions.beds.min}
           isNumerical={true}
+          setFilterValues={props.setFilterValues}
+          filterValues={props.filterValues}
         />
-        <SelectBox name="Type of estate" options={props.filterOptions.type} />
-        <SelectBox name="Order by" options={props.filterOptions.orderBy} />
+        <SelectBox
+          name="Type of estate"
+          keyValue="type"
+          options={props.filterOptions.type}
+          setFilterValues={props.setFilterValues}
+          filterValues={props.filterValues}
+        />
+        <SelectBox
+          name="Order by"
+          keyValue="orderBy"
+          options={props.filterOptions.orderBy}
+          setFilterValues={props.setFilterValues}
+          filterValues={props.filterValues}
+        />
       </div>
       <div className="flex justify-between">
         <div className="flex flex-col w-1/2 pr-4">
@@ -30,6 +48,8 @@ function Filters(props) {
             className="w-full py-4"
             min={props.filterOptions.price.min}
             max={props.filterOptions.price.max}
+            values={props.filterValues.price}
+            setFilterValues={props.setFilterValues}
             isPrice={true}
             step={Math.pow(
               10,
@@ -43,6 +63,8 @@ function Filters(props) {
             className="w-full py-4"
             min={props.filterOptions.size.min}
             max={props.filterOptions.size.max}
+            values={props.filterValues.size}
+            setFilterValues={props.setFilterValues}
             isPrice={false}
             step={Math.pow(
               10,

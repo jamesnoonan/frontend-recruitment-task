@@ -13,9 +13,12 @@ function Search(props) {
     <div className="flex w-2/4 pt-10">
       <select
         name="search-type"
+        value={props.filterValues.status ? props.filterValues.status : 'none'}
+        onChange={(e) => props.setFilterValues('status', e.target.value)}
         className="text-gray-700 text-xs p-4 rounded-tl-xl rounded-bl-xl"
       >
-        <option value="all">All</option>
+        {/* None gives no restrictions on results */}
+        <option value="none">All</option>
         {props.filterOptions &&
           props.filterOptions.status.map((option) => (
             <option value={option} key={option}>
@@ -26,10 +29,13 @@ function Search(props) {
       <div className="flex items-center justify-center pl-11 bg-white">
         <img src={searchIcon} alt="Search Icon" />
       </div>
+      {/* In the future with a real back-end, this input field should be throttled to reduce unecessary requests*/}
       <input
         type="text"
-        value={props.searchTerm}
-        onChange={(e) => props.setSearchTerm(e.target.value)}
+        value={
+          props.filterValues.searchTerm ? props.filterValues.searchTerm : ''
+        }
+        onChange={(e) => props.setFilterValues('searchTerm', e.target.value)}
         placeholder="Search for properties or keywords..."
         className="flex-grow p-4 rounded-tr-xl rounded-br-xl text-xs placeholder-gray-600"
       />

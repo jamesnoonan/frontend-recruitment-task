@@ -4,6 +4,7 @@ import React from 'react';
 import { readString } from 'react-papaparse';
 
 import Property from '../models/Property';
+import filterResults from '../util/filterResults';
 
 import Header from '../components/Header';
 import Filters from '../components/Filters';
@@ -16,13 +17,13 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
 
-    this.setSearchTerm = this.setSearchTerm.bind(this);
+    this.setFilterValues = this.setFilterValues.bind(this);
     this.showMoreResults = this.showMoreResults.bind(this);
 
     this.state = {
       dataLoaded: false,
-      searchTerm: '',
       properties: [],
+      filterValues: { searchTerm: '' },
       filteredProperties: [],
     };
   }
@@ -105,32 +106,21 @@ class Home extends React.Component {
     }));
   }
 
-  filterResults() {
-    // Get all properties
-    const initial = [...this.state.properties];
-    // Filter the properties that match the requirements
-    const filtered = initial.filter(
-      (property) =>
-        property.title
-          .toLowerCase()
-          .includes(this.state.searchTerm.toLowerCase()) ||
-        property.address
-          .toLowerCase()
-          .includes(this.state.searchTerm.toLowerCase())
-    );
-    this.setState((state, props) => ({
-      filteredProperties: filtered,
-      // If the filtered results have more than 6, show the "Show More" button
-      moreResults: filtered.length > 6,
-    }));
-  }
-
-  setSearchTerm(term) {
-    this.setState(
-      // Update the search term and limit the results to 6 again
-      { searchTerm: term, resultsDisplayed: 6 },
-      this.filterResults
-    );
+  setFilterValues(filterType, filterValue) {
+    this.setState((state, props) => {
+      // Adjust filter values
+      const newFilters = { ...state.filterValues };
+      newFilters[filterType] = filterValue;
+      // Filter results based on new values
+      const filtered = filterResults(state.properties, newFilters);
+      return {
+        filterValues: newFilters,
+        filteredProperties: filtered,
+        resultsDisplayed: 6,
+        // If the filtered results have more than 6, show the "Show More" button
+        moreResults: filtered.length > 6,
+      };
+    });
   }
 
   render() {
@@ -138,11 +128,15 @@ class Home extends React.Component {
       <>
         <Header
           filterOptions={this.state.filterOptions}
-          searchTerm={this.state.searchTerm}
-          setSearchTerm={this.setSearchTerm}
+          filterValues={this.state.filterValues}
+          setFilterValues={this.setFilterValues}
         />
         {this.state.filterOptions && (
-          <Filters filterOptions={this.state.filterOptions} />
+          <Filters
+            filterOptions={this.state.filterOptions}
+            filterValues={this.state.filterValues}
+            setFilterValues={this.setFilterValues}
+          />
         )}
         {this.state.properties.length > 0 ? (
           <Results

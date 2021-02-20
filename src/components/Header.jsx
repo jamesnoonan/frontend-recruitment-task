@@ -19,8 +19,8 @@ function Header(props) {
         </p>
         <Search
           filterOptions={props.filterOptions}
-          searchTerm={props.searchTerm}
-          setSearchTerm={props.setSearchTerm}
+          filterValues={props.filterValues}
+          setFilterValues={props.setFilterValues}
         />
       </div>
     </div>

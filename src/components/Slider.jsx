@@ -37,6 +37,13 @@ class Slider extends React.Component {
   }
 
   handleMouseUp() {
+    // If finished dragging update filters
+    if (this.state.mouseDown) {
+      this.props.setFilterValues(this.props.isPrice ? 'price' : 'size', {
+        min: this.state.currentMin,
+        max: this.state.currentMax,
+      });
+    }
     // Stop moving slider once mouse is up
     this.setState({ mouseDown: false, currentHandle: null });
   }
