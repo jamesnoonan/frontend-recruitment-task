@@ -10,20 +10,30 @@ class Slider extends React.Component {
     this.handleMove = this.handleMove.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
+    this.setDistances = this.setDistances.bind(this);
 
     this.dragContainer = React.createRef();
+    this.minText = React.createRef();
+    this.maxText = React.createRef();
 
     this.state = {
       mouseDown: false,
       currentHandle: null,
       currentMin: props.min,
       currentMax: props.max,
+      left: 0,
+      right: 0,
+      textLeft: 0,
+      textRight: 0,
     };
   }
 
   componentDidMount() {
     // Handle mouse up no matter where the user releases the mouse
     window.addEventListener('mouseup', this.handleMouseUp, false);
+    // Adjust text distances if browser is resized
+    this.setDistances();
+    window.addEventListener('resize', this.setDistances);
   }
 
   handleMouseUp() {
@@ -32,17 +42,87 @@ class Slider extends React.Component {
   }
 
   componentWillUnmount() {
-    // Remove listener once component is destroyed
+    // Remove listeners once component is destroyed
+    window.removeEventListener('resize', this.setDistances);
     window.removeEventListener('mouseup', this.handleMouseUp, false);
   }
 
-  getDistance(min) {
-    // Return distance from left or right for positioning purposes (in %)
-    return min
-      ? (100 * (this.state.currentMin - this.props.min)) /
-          (this.props.max - this.props.min)
-      : (100 * (this.props.max - this.state.currentMax)) /
-          (this.props.max - this.props.min);
+  setDistances() {
+    this.setState((state, props) => ({
+      left: this.getDistance(state, props, true),
+      right: this.getDistance(state, props, false),
+      textLeft: this.getDistance(state, props, true, true),
+      textRight: this.getDistance(state, props, false, true),
+    }));
+  }
+
+  getDistance(state, props, left, isText) {
+    // Middle distance from left or right for positioning purposes (in %)
+    const leftMid =
+      (100 * (state.currentMin - props.min)) / (props.max - props.min);
+    const rightMid =
+      (100 * (props.max - state.currentMax)) / (props.max - props.min);
+    const mid = left ? leftMid : rightMid;
+    // If distance isn't for text, then simply return the mid point
+    if (!isText) {
+      return mid;
+    }
+
+    // Check if text is overflowing off either edge of the bar
+    const overflowLeft =
+      (leftMid / 100) * this.dragContainer.current.offsetWidth -
+      this.minText.current.offsetWidth / 2;
+    const overflowRight =
+      (rightMid / 100) * this.dragContainer.current.offsetWidth -
+      this.maxText.current.offsetWidth / 2;
+    // Shift text to edge of slider handle
+    const adjustment = 10;
+    // Convert px to % of slider bar
+    const overflowAmount =
+      (100 * ((left ? overflowLeft : overflowRight) + adjustment)) /
+      this.dragContainer.current.offsetWidth;
+    // If the text is overflowing, return the adjusted mid point
+    if (overflowAmount < 0) {
+      return mid - overflowAmount;
+    }
+
+    // Check if text is crossing over each other
+
+    // Check if text is also pressed against edge of slider
+    const otherTextEdge = left ? overflowRight < 0 : overflowLeft < 0;
+    const betweenTextWidth =
+      this.maxText.current.offsetWidth / (left && otherTextEdge ? 1 : 2) +
+      this.minText.current.offsetWidth / (!left && otherTextEdge ? 1 : 2);
+    const textCrossover =
+      betweenTextWidth -
+      ((100 -
+        ((left && otherTextEdge ? 0 : rightMid) +
+          (!left && otherTextEdge ? 0 : leftMid))) /
+        100) *
+        this.dragContainer.current.offsetWidth;
+
+    if (textCrossover > 0) {
+      const crossoverRelative =
+        (100 * (textCrossover + 10)) / this.dragContainer.current.offsetWidth;
+      // The distance to shift the text so that it doesn't overflow
+      const textOverflowShifted = crossoverRelative / (otherTextEdge ? 1 : 2);
+      if (textOverflowShifted > overflowAmount) {
+        // Return position of text at very end of slider
+        return (
+          (100 *
+            (left
+              ? this.minText.current.offsetWidth
+              : this.maxText.current.offsetWidth)) /
+          2 /
+          this.dragContainer.current.offsetWidth
+        );
+      } else {
+        // Return shifted text to avoid crossover
+        return mid - textOverflowShifted;
+      }
+    }
+
+    return mid;
   }
 
   handleMouseDown(e) {
@@ -87,6 +167,7 @@ class Slider extends React.Component {
           state.currentHandle === 'min'
             ? pos + props.step <= state.currentMax
             : pos >= state.currentMin + props.step;
+        // If far enough apart, then set new position
         if (isStepApart) {
           return state.currentHandle === 'min'
             ? { currentMin: pos }
@@ -94,7 +175,7 @@ class Slider extends React.Component {
         } else {
           return {};
         }
-      });
+      }, this.setDistances);
     }
   }
 
@@ -111,13 +192,14 @@ class Slider extends React.Component {
           <div
             className="absolute bg-blue-600 rounded-full h-4.5 w-4.5 top-0.5 shadow-md transform -translate-x-1/2 -translate-y-1/2"
             style={{
-              left: this.getDistance(true) + '%',
+              left: this.state.left + '%',
             }}
           ></div>
           <p
             className="text-blue-600 text-sm font-bold absolute transform -translate-x-1/2 translate-y-1/2"
+            ref={this.minText}
             style={{
-              left: this.getDistance(true) + '%',
+              left: this.state.textLeft + '%',
             }}
           >
             {this.props.isPrice
@@ -128,13 +210,14 @@ class Slider extends React.Component {
           <div
             className="absolute bg-blue-600 rounded-full h-4.5 w-4.5 top-0.5 shadow-md transform translate-x-1/2 -translate-y-1/2"
             style={{
-              right: this.getDistance(false) + '%',
+              right: this.state.right + '%',
             }}
           ></div>
           <p
             className="text-blue-600 text-sm font-bold absolute transform translate-x-1/2 translate-y-1/2"
+            ref={this.maxText}
             style={{
-              right: this.getDistance(false) + '%',
+              right: this.state.textRight + '%',
             }}
           >
             {this.props.isPrice
@@ -145,7 +228,7 @@ class Slider extends React.Component {
           <div
             className="absolute h-1.25 bg-blue-600"
             style={{
-              left: this.getDistance(true) + '%',
+              left: this.state.left + '%',
               width:
                 (100 * (this.state.currentMax - this.state.currentMin)) /
                   (this.props.max - this.props.min) +
