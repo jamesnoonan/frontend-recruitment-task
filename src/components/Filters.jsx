@@ -1,97 +1,53 @@
 // The filters section of the page which changes which results are displayed
 
+import SelectBox from './SelectBox';
 import Slider from './Slider';
 
 function Filters(props) {
-  // TODO: Get max numbers of beds and baths to create lists
-  const maxBed = 6;
-  const maxBath = 4;
-
   return (
     <div className="pt-16 px-48">
       <h3 className="text-gray-700 text-xl font-bold">Filters</h3>
       <div className="flex justify-between py-5 -mx-3">
-        {/* TODO: Reduce repeditiveness of select boxes */}
-        <select
-          name="baths"
-          defaultValue=""
-          className="border-2 border-gray-300 text-gray-600 text-xs font-medium p-4 rounded-lg mx-3 flex-grow"
-        >
-          <option value="" disabled>
-            Baths
-          </option>
-          {/* Generates options depending on number of baths */}
-          {Array.from(Array(maxBath).keys()).map((item, index) => (
-            <option key={(index + 1).toString()} value={(index + 1).toString()}>
-              {index + 1}
-            </option>
-          ))}
-        </select>
-        <select
-          name="beds"
-          defaultValue=""
-          className="border-2 border-gray-300 text-gray-600 text-xs font-medium p-4 rounded-lg mx-3 flex-grow"
-        >
-          <option value="" disabled>
-            Beds
-          </option>
-          {/* Generates options depending on number of baths */}
-          {Array.from(Array(maxBed).keys()).map((item, index) => (
-            <option key={(index + 1).toString()} value={(index + 1).toString()}>
-              {index + 1}
-            </option>
-          ))}
-        </select>
-        <select
-          name="type"
-          defaultValue=""
-          className="border-2 border-gray-300 text-gray-600 text-xs font-medium p-4 rounded-lg mx-3 flex-grow"
-        >
-          <option value="" disabled>
-            Type of estate
-          </option>
-          {/* Generates options depending on number of baths */}
-          {Array.from(Array(maxBath).keys()).map((item, index) => (
-            <option key={(index + 1).toString()} value={(index + 1).toString()}>
-              {index + 1}
-            </option>
-          ))}
-        </select>
-        <select
-          name="order"
-          defaultValue=""
-          className="border-2 border-gray-300 text-gray-600 text-xs font-medium p-4 rounded-lg mx-3 flex-grow"
-        >
-          <option value="" disabled>
-            Order by
-          </option>
-          {/* Generates options depending on number of baths */}
-          {Array.from(Array(maxBath).keys()).map((item, index) => (
-            <option key={(index + 1).toString()} value={(index + 1).toString()}>
-              {index + 1}
-            </option>
-          ))}
-        </select>
+        <SelectBox
+          name="Baths"
+          max={props.filterOptions.baths.max}
+          min={props.filterOptions.baths.min}
+          isNumerical={true}
+        />
+        <SelectBox
+          name="Beds"
+          max={props.filterOptions.beds.max}
+          min={props.filterOptions.beds.min}
+          isNumerical={true}
+        />
+        <SelectBox name="Type of estate" options={props.filterOptions.type} />
+        <SelectBox name="Order by" options={props.filterOptions.orderBy} />
       </div>
       <div className="flex justify-between">
         <div className="flex flex-col w-1/2 pr-4">
           <h4 className="font-bold text-gray-700">Price range</h4>
           <Slider
             className="w-full py-4"
-            min={100000}
-            max={10000000}
+            min={props.filterOptions.price.min}
+            max={props.filterOptions.price.max}
             isPrice={true}
-            step={100000}
+            step={Math.pow(
+              10,
+              Math.floor(Math.log10(props.filterOptions.price.min))
+            )}
           />
         </div>
         <div className="flex flex-col w-1/2 pl-4">
           <h4 className="font-bold text-gray-700">Square Footage</h4>
           <Slider
             className="w-full py-4"
-            min={100}
-            max={2000}
+            min={props.filterOptions.size.min}
+            max={props.filterOptions.size.max}
             isPrice={false}
-            step={100}
+            step={Math.pow(
+              10,
+              Math.floor(Math.log10(props.filterOptions.size.min))
+            )}
           />
         </div>
       </div>

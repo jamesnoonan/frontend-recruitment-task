@@ -18,6 +18,7 @@ function Header(props) {
           Find the house of your dreams.
         </p>
         <Search
+          filterOptions={props.filterOptions}
           searchTerm={props.searchTerm}
           setSearchTerm={props.setSearchTerm}
         />

@@ -3,6 +3,12 @@
 import searchIcon from '../assets/icons/search.svg';
 
 function Search(props) {
+  const titleCase = (input) => {
+    let words = input.split(' ');
+    words = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+    return words.join(' ');
+  };
+
   return (
     <div className="flex w-2/4 pt-10">
       <select
@@ -10,9 +16,12 @@ function Search(props) {
         className="text-gray-700 text-xs p-4 rounded-tl-xl rounded-bl-xl"
       >
         <option value="all">All</option>
-        <option value="sale">For Sale</option>
-        <option value="rent">For Rent</option>
-        <option value="reserved">Reserved</option>
+        {props.filterOptions &&
+          props.filterOptions.status.map((option) => (
+            <option value={option} key={option}>
+              {titleCase(option.replace('-', ' '))}
+            </option>
+          ))}
       </select>
       <div className="flex items-center justify-center pl-11 bg-white">
         <img src={searchIcon} alt="Search Icon" />

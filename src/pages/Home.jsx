@@ -46,11 +46,54 @@ class Home extends React.Component {
         filteredProperties: data,
         resultsDisplayed: 6,
         moreResults: data.length > 6,
+        filterOptions: this.generateFilterOptions(data),
       });
     } catch (err) {
       // Error in collecting data
       this.setState({ dataLoaded: true });
     }
+  }
+
+  generateFilterOptions(data) {
+    // Get properties of the results
+    const keys = Object.keys(data[0]);
+    // Remove id and image
+    keys.splice(keys.indexOf('id'), 1);
+    keys.splice(keys.indexOf('image'), 1);
+
+    const filterOptions = { orderBy: keys };
+    keys.forEach((key) => {
+      const options = [];
+      data.forEach((item) => {
+        options.push(item[key]);
+      });
+      filterOptions[key] = this.getFilterOptions(
+        options,
+        typeof options[0] === 'number',
+        1
+      );
+    });
+    return filterOptions;
+  }
+
+  getFilterOptions(allOptions, isNumerical) {
+    if (isNumerical) {
+      let min = Math.min.apply(0, allOptions);
+      let max = Math.max.apply(0, allOptions);
+
+      // Round to nearest power of 10
+      const roundTo = Math.pow(10, Math.floor(Math.log10(min)));
+
+      min = Math.floor(min / roundTo) * roundTo;
+      max = Math.ceil(max / roundTo) * roundTo;
+      return { min, max };
+    }
+    // For large datasets this could become inefficient since it takes O(x^2) time
+    // To improve this, the options could be updated on the server when new listings are added
+    const uniqueOptions = allOptions.filter((option, index, self) => {
+      return self.indexOf(option) == index;
+    });
+    return uniqueOptions;
   }
 
   showMoreResults(e) {
@@ -94,10 +137,13 @@ class Home extends React.Component {
     return (
       <>
         <Header
+          filterOptions={this.state.filterOptions}
           searchTerm={this.state.searchTerm}
           setSearchTerm={this.setSearchTerm}
         />
-        <Filters />
+        {this.state.filterOptions && (
+          <Filters filterOptions={this.state.filterOptions} />
+        )}
         {this.state.properties.length > 0 ? (
           <Results
             moreResults={this.state.moreResults}
