@@ -8,6 +8,58 @@
   padding-left: 10%;
 }
 
-nav ul li {
+nav ul li,
+#side-menu ul li {
   cursor: pointer;
+}
+
+// Hamburger Menu for Small Devices
+
+%hamburger-section {
+  content: '';
+  height: 3px;
+  width: 35px;
+  background-color: white;
+  border-radius: 4px;
+  transition: 0.4s ease;
+}
+
+#hamburger {
+  @extend %hamburger-section;
+  position: relative;
+  &::before,
+  &::after {
+    @extend %hamburger-section;
+    position: absolute;
+    transform: translateY(-9px);
+  }
+
+  &::after {
+    transform: translateY(9px);
+  }
+}
+
+// Change hamburger to X when menu is open
+#hamburger.close {
+  background-color: transparent;
+  &::before {
+    transform: rotate(45deg) translateY(0);
+  }
+  &::after {
+    transform: rotate(-45deg) translateY(0);
+  }
+}
+
+#side-menu {
+  padding-top: 150px;
+  height: 100vh;
+  width: 80vw;
+  background-color: #004dff;
+  transform: translateX(0);
+  transition: 0.3s ease;
+  left: 100%;
+}
+
+#side-menu.open {
+  transform: translateX(-100%);
 }
