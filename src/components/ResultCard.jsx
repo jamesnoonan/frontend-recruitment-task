@@ -8,11 +8,24 @@ import bedIcon from '../assets/icons/bed-icon.svg';
 import sizeIcon from '../assets/icons/size-icon.svg';
 
 class ResultCard extends React.PureComponent {
+  convertImgUrl(url) {
+    // Lower the requested image quality to reduce file size
+    const requestedWidth = 500;
+    // Assumes that images are stored on unsplash, may have to be changed for real back-end
+    const strippedUrl = url.slice(0, url.indexOf('?'));
+    const newUrl = strippedUrl + '?w=' + requestedWidth.toString();
+    return newUrl;
+  }
+
   render() {
     return (
       <div className="flex flex-col w-1/3 p-4 mb-6">
         <div
-          style={{ backgroundImage: `url(${this.props.result.image})` }}
+          style={{
+            backgroundImage: `url(${this.convertImgUrl(
+              this.props.result.image
+            )})`,
+          }}
           className="h-72 bg-cover bg-no-repeat bg-center"
         ></div>
         <div className="px-4 pt-3">
