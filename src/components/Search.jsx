@@ -10,7 +10,7 @@ function Search(props) {
   };
 
   return (
-    <div className="flex w-2/4 pt-10">
+    <div className="flex w-11/12 md:w-2/4 pt-10">
       <select
         name="search-type"
         value={props.filterValues.status ? props.filterValues.status : 'none'}
@@ -26,7 +26,7 @@ function Search(props) {
             </option>
           ))}
       </select>
-      <div className="flex items-center justify-center pl-11 bg-white">
+      <div className="hidden md:flex items-center justify-center pl-11 bg-white">
         <img src={searchIcon} alt="Search Icon" />
       </div>
       {/* In the future with a real back-end, this input field should be throttled to reduce unecessary requests*/}

@@ -11,11 +11,11 @@ class FeaturedResult extends React.PureComponent {
   render() {
     return (
       <div
-        className="w-full h-screen flex items-center bg-cover bg-no-repeat bg-center"
+        className="w-full h-screen flex justify-center md:justify-start items-center bg-cover bg-no-repeat bg-center"
         style={{ backgroundImage: `url(${this.props.result.image})` }}
       >
-        <div className="ml-32 bg-white p-11 pr-32 rounded-md">
-          <div className="w-max">
+        <div className="md:ml-32 bg-white w-4/5 md:w-auto p-11 md:pr-32 rounded-md">
+          <div className="md:w-max">
             <div className="bg-orange-600 px-2.5 py-1.5 mb-6 w-max rounded-md">
               <p className="text-white text-xs tracking-wide">
                 {this.props.result.status.replace('-', ' ').toUpperCase()}

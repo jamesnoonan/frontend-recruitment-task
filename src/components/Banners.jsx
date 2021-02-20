@@ -2,9 +2,9 @@
 
 function Banners(props) {
   return (
-    <div className="flex justify-center px-48 py-10 mb-10">
-      <div className="w-1/2">
-        <div className="h-full mr-5 px-9 py-12 bg-gray-50 rounded-md leading-tight">
+    <div className="flex justify-center px-10 lg:px-48 py-10 mb-10 flex-wrap">
+      <div className="w-full md:w-1/2 mb-3 md:mb-0">
+        <div className="h-full md:mr-5 px-9 py-12 bg-gray-50 rounded-md leading-tight">
           <h1 className="text-4xl text-blue-600">Aktas Properties</h1>
           <h1 className="text-4xl font-medium text-blue-600">Information</h1>
           <div className="mt-4 text-lg text-gray-600 leading-10">
@@ -14,8 +14,8 @@ function Banners(props) {
           </div>
         </div>
       </div>
-      <div className="w-1/2">
-        <div className="h-full ml-5 px-9 py-12 bg-blue-600 rounded-md leading-tight">
+      <div className="w-full md:w-1/2">
+        <div className="h-full md:ml-5 px-9 py-12 bg-blue-600 rounded-md leading-tight">
           <h1 className="text-4xl font-medium text-white">
             Want to Sell
             <br />

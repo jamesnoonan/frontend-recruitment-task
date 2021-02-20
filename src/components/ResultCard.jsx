@@ -19,7 +19,7 @@ class ResultCard extends React.PureComponent {
 
   render() {
     return (
-      <div className="flex flex-col w-1/3 p-4 mb-6">
+      <div className="flex flex-col w-full md:w-1/2 xl:w-1/3 p-4 mb-6">
         <div
           style={{
             backgroundImage: `url(${this.convertImgUrl(

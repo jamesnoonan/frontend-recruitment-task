@@ -5,9 +5,9 @@ import Slider from './Slider';
 
 function Filters(props) {
   return (
-    <div className="pt-16 px-48">
+    <div className="pt-16 px-20 lg:px-48">
       <h3 className="text-gray-700 text-xl font-bold">Filters</h3>
-      <div className="flex justify-between py-5 -mx-3">
+      <div className="flex justify-between flex-wrap flex-col md:flex-row py-5 -mx-6">
         <SelectBox
           name="Baths"
           keyValue="baths"
@@ -41,8 +41,8 @@ function Filters(props) {
           filterValues={props.filterValues}
         />
       </div>
-      <div className="flex justify-between">
-        <div className="flex flex-col w-1/2 pr-4">
+      <div className="flex justify-between flex-wrap">
+        <div className="flex flex-col w-full md:w-1/2 md:pr-4">
           <h4 className="font-bold text-gray-700">Price range</h4>
           <Slider
             className="w-full py-4"
@@ -57,7 +57,7 @@ function Filters(props) {
             )}
           />
         </div>
-        <div className="flex flex-col w-1/2 pl-4">
+        <div className="flex flex-col w-full md:w-1/2 md:pl-4 pt-4 md:pt-0">
           <h4 className="font-bold text-gray-700">Square Footage</h4>
           <Slider
             className="w-full py-4"

@@ -7,7 +7,7 @@ import ResultCard from './ResultCard';
 class Results extends React.PureComponent {
   render() {
     return (
-      <div className="pt-12 px-48 flex flex-col">
+      <div className="pt-12 px-20 lg:px-48 flex flex-col">
         <div className="flex justify-around flex-wrap -mx-4">
           {this.props.results.map((item) => (
             <ResultCard key={item.id} result={item} />

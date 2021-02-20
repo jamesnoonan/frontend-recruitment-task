@@ -35,10 +35,10 @@ class SelectBox extends React.Component {
             : 'none'
         }
         onChange={this.handleChange}
-        className="border-2 border-gray-300 text-gray-600 text-xs font-medium p-4 rounded-lg mx-3 flex-grow"
+        className="border-2 border-gray-300 text-gray-600 text-xs font-medium p-4 rounded-lg mx-3 my-3 md:my-0 flex-grow"
       >
         <option value="none">{this.props.name}</option>
-        {/* Generates options depending on number of baths */}
+        {/* Generates options depending on what is in data */}
         {options.map((item, index) => (
           <option key={item.toString()} value={item.toString().toLowerCase()}>
             {item}
