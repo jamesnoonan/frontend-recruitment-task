@@ -98,7 +98,7 @@ class Home extends React.Component {
           setSearchTerm={this.setSearchTerm}
         />
         <Filters />
-        {this.state.properties.length > 0 && (
+        {this.state.properties.length > 0 ? (
           <Results
             moreResults={this.state.moreResults}
             showMoreResults={this.showMoreResults}
@@ -107,6 +107,10 @@ class Home extends React.Component {
               this.state.resultsDisplayed
             )}
           />
+        ) : (
+          <h3 className="text-3xl text-gray-600 text-center pt-20 pb-10 ">
+            Loading results...
+          </h3>
         )}
         <Banners />
         {this.state.properties.length > 0 && (

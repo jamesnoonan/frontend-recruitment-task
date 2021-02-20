@@ -12,6 +12,15 @@ class Results extends React.PureComponent {
           {this.props.results.map((item) => (
             <ResultCard key={item.id} result={item} />
           ))}
+          {this.props.results.length === 0 && (
+            <div className="flex flex-col items-center py-10">
+              <h3 className="text-3xl text-gray-600">No results found!</h3>
+              <p className="text-lg text-gray-400">
+                Sorry, we couldn't find anything matching your search. Adjust
+                your filters and try again.
+              </p>
+            </div>
+          )}
         </div>
         <div className="text-center py-7">
           {this.props.moreResults && (
