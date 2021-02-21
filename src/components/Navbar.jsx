@@ -45,7 +45,7 @@ function Navbar(props) {
       </nav>
       <div
         id="side-menu"
-        className={`fixed md:hidden shadow-2xl ${menuOpen ? 'open' : ''}`}
+        className={`z-30 fixed md:hidden shadow-2xl ${menuOpen ? 'open' : ''}`}
       >
         <ul className="flex flex-col items-center text-white text-lg leading-10 font-light">
           <li>Homepage</li>
